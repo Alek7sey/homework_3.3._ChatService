@@ -1,8 +1,10 @@
 object ChatService {
     private val chats = mutableMapOf<Int, Chat>()
+    private var messageId = 0
 
     fun sendMessage(userId: Int, message: Message) {
         chats.getOrPut(userId) { Chat() }.messages += message
+        message.id = messageId++
     }
 
     fun deleteMessage(userId: Int, message: Message): Boolean? {
@@ -49,14 +51,21 @@ object ChatService {
         }
     }
 
-    fun listMessages(userId: Int): List<String>? {
+    fun listMessages(userId: Int, startMessageId: Int, offsetMessage: Int): List<Message>? {
         return if (chats[userId] != null) {
-            chats[userId]?.messages?.map { it.text }
-        } else throw UserNotFoundException("No user with id = $userId")
+            chats.getValue(userId).messages
+                ?.filter { it.id > startMessageId }
+                ?.take(offsetMessage)
+                ?.onEach { it.messageRead = true }
+        } else {
+            throw UserNotFoundException("No user with id = $userId")
+        }
+
     }
 
     fun clear() {
         chats.clear()
+        messageId = 0
     }
 }
 

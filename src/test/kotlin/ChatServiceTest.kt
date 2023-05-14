@@ -5,10 +5,10 @@ import org.junit.Before
 
 class ChatServiceTest {
 
-    private val message1 = Message("Hello", 1, false)
-    private val message2 = Message("Hello", 1)
-    private val message3 = Message("Привет", 1, false)
-    private val message4 = Message("Здравствуйте", 1, false)
+    private val message1 = Message(1,"Hello", 1, false)
+    private val message2 = Message(2, "Hello", 1)
+    private val message3 = Message(3, "Привет", 1, false)
+    private val message4 = Message(4,"Здравствуйте", 1, false)
 
     @Before
     fun clearBeforeTest() {
@@ -73,6 +73,6 @@ class ChatServiceTest {
     fun listMessagesUserNotFound() {
         ChatService.sendMessage(1, message2)
         ChatService.sendMessage(1, message4)
-        ChatService.listMessages(2)
+        ChatService.listMessages(2, 2,2)
     }
 }
