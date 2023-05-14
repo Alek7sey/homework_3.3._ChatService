@@ -56,7 +56,7 @@ object ChatService {
             chats.getValue(userId).messages
                 ?.filter { it.id > startMessageId }
                 ?.take(offsetMessage)
-                ?.onEach { it.messageRead = true }
+                ?.onEach { if (it.incomming == 1) it.messageRead = true }
         } else {
             throw UserNotFoundException("No user with id = $userId")
         }
