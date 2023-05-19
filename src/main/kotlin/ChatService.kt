@@ -54,9 +54,11 @@ object ChatService {
     fun listMessages(userId: Int, startMessageId: Int, offsetMessage: Int): List<Message>? {
         return if (chats[userId] != null) {
             chats.getValue(userId).messages
+                ?.asSequence()
                 ?.filter { it.id > startMessageId }
                 ?.take(offsetMessage)
                 ?.onEach { if (it.incomming == 1) it.messageRead = true }
+                ?.toList()
         } else {
             throw UserNotFoundException("No user with id = $userId")
         }
